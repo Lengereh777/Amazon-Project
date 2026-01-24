@@ -1,0 +1,191 @@
+# Backend Files Summary - Amazon Clone
+
+## Project Overview
+The Amazon Clone backend provides API endpoints for payment processing, order management, and product management. It supports two deployment options:
+1. **Standalone Node.js Server** - Express.js server with mock data fallback (for Render/VPS)
+2. **Firebase Cloud Functions** - Serverless deployment on Firebase
+
+## File Structure
+
+### 1. Standalone Server Files (Backend/ directory)
+
+#### `server.js` (Main Server File)
+- **Purpose**: Express.js server with all API endpoints
+- **Key Features**:
+  - Payment processing (Stripe integration) with mock fallback
+  - Order management (Firestore + mock data)
+  - Product management (CRUD operations)
+  - Firebase Admin SDK initialization
+  - Stripe API integration with error handling
+  - CORS and JSON parsing middleware
+
+#### `index.js` (Firebase Functions Version)
+- **Purpose**: Firebase Cloud Functions implementation of the same API
+- **Key Features**:
+  - Serverless architecture
+  - Direct integration with Firebase services
+  - Same endpoints as standalone server
+  - Uses Firebase Functions config for environment variables
+
+#### `package.json`
+- **Purpose**: Project dependencies and scripts
+- **Key Scripts**:
+  - `npm run dev` - Development server with hot reload (nodemon)
+  - `npm start` - Production server
+  - `npm run lint` - ESLint code validation
+  - `npm run serve:firebase` - Local Firebase Functions emulator
+  - `npm run deploy:firebase` - Deploy to Firebase Cloud Functions
+
+#### `.env` and `.env.example`
+- **Purpose**: Environment configuration
+- **Required Variables**:
+  - Firebase Service Account Key (JSON string)
+  - Stripe API Keys
+  - Server port (default: 5000)
+  - Firebase configuration for frontend
+
+#### `README.md`
+- **Purpose**: Comprehensive documentation
+- **Contents**:
+  - Installation instructions
+  - Server usage (development/production)
+  - Firebase Functions setup and deployment
+  - API endpoint documentation
+  - Firestore structure
+  - Deployment options (Render/Firebase)
+
+#### `.gitignore`
+- **Purpose**: Git ignore configuration for backend files
+
+### 2. Firebase Functions Files (functions/ directory)
+
+#### `index.js`
+- **Purpose**: Firebase Cloud Functions implementation (same as Backend/index.js)
+
+#### `package.json`
+- **Purpose**: Firebase Functions dependencies
+- **Key Dependencies**: firebase-admin, firebase-functions, stripe, cors
+
+## API Endpoints
+
+### Payment Endpoints
+- `/createPaymentIntent` - Create Stripe payment intent
+- `/processPayment` - Process payment and create order
+
+### Order Endpoints
+- `/getUserOrders` - Retrieve user's orders
+
+### Product Management (Admin)
+- `/getProducts` - Get all products
+- `/getProductById` - Get product by ID
+- `/getProductsByCategory` - Get products by category
+- `/getCategories` - Get all categories
+- `/createProduct` - Create new product
+- `/updateProduct` - Update product
+- `/deleteProduct` - Delete product
+- `/duplicateProduct` - Duplicate existing product
+
+### Health Check
+- `/health` - Server health check endpoint
+
+## Technologies Used
+
+### Core Technologies
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web framework (standalone server)
+- **Firebase Admin SDK** - Backend access to Firebase services
+- **Firebase Cloud Functions** - Serverless execution environment
+- **Stripe API** - Payment processing
+- **Firestore** - NoSQL database for data storage
+
+### Development Tools
+- **Nodemon** - Auto-reloading for development
+- **ESLint** - Code linting
+- **Firebase CLI** - Firebase deployment and emulation
+
+## Deployment Options
+
+### Option 1: Render (Recommended)
+- Web service deployment
+- Environment variables via Render dashboard
+- Automatic deployments from GitHub
+
+### Option 2: Firebase Cloud Functions
+- Serverless deployment
+- Scales automatically
+- Integrated with Firebase ecosystem
+
+### Option 3: Local Development
+- Standalone server with `npm run dev`
+- Firebase Functions emulator with `npm run serve:firebase`
+
+## Data Structure
+
+### Products Collection (Firestore)
+```javascript
+products: {
+  title: string,
+  price: number,
+  description: string,
+  category: string,
+  image: string,
+  rating: { rate: number, count: number },
+  createdAt: timestamp,
+  updatedAt?: timestamp,
+  duplicatedFrom?: string,
+  isDuplicate?: boolean
+}
+```
+
+### Orders Collection (Firestore)
+```javascript
+orders: {
+  userId: string,
+  items: array,
+  total: number,
+  paymentId: string,
+  status: string,
+  createdAt: timestamp,
+  shippingDetails: object
+}
+```
+
+## Key Features
+
+1. **Payment Processing**: Stripe integration with fallback to mock data
+2. **Order Management**: Firestore-based order storage with user filtering
+3. **Product Management**: Complete CRUD operations for product catalog
+4. **Category Management**: Dynamic category extraction from products
+5. **Error Handling**: Comprehensive error handling with meaningful responses
+6. **Mock Data**: Fallback to mock data for testing without external APIs
+7. **Security**: CORS configuration and input validation
+8. **Scalability**: Both serverless and standalone options available
+
+## Setup Instructions
+
+### 1. Standalone Server
+```bash
+cd Backend
+npm install
+cp .env.example .env  # Update with your credentials
+npm run dev
+```
+
+### 2. Firebase Functions
+```bash
+firebase login
+firebase init functions
+firebase functions:config:set stripe.secret_key="your-key"
+cd functions
+npm install
+npm run serve  # Local emulator
+npm run deploy  # Deploy to production
+```
+
+## Usage Notes
+
+- Both backend implementations share the same API interface
+- The standalone server provides mock data fallback for development
+- Firebase Functions require proper Firebase project configuration
+- Stripe API keys must be kept secure and not committed to version control
+- Environment variables should be properly configured for each deployment environment
