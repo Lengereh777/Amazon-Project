@@ -1,14 +1,17 @@
+require('dotenv').config();
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const stripe = require('stripe')(functions.config().stripe.secret_key);
+// const stripe = require('stripe')(functions.config().stripe.secret_key);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const cors = require('cors')({ origin: true });
 
 admin.initializeApp();
 const db = admin.firestore();
 
+
 // Create payment intent endpoint
-exports.createPaymentIntent = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
+exports.createPaymentIntent = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
         try {
             const { amount, currency } = req.body;
 
@@ -40,9 +43,10 @@ exports.createPaymentIntent = functions.https.onRequest(async (req, res) => {
     });
 });
 
+
 // Payment processing endpoint
-exports.processPayment = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
+exports.processPayment = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
         try {
             const { token, amount, items, userId, orderId } = req.body;
 
@@ -87,9 +91,10 @@ exports.processPayment = functions.https.onRequest(async (req, res) => {
     });
 });
 
+
 // Get user orders endpoint
-exports.getUserOrders = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
+exports.getUserOrders = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
         try {
             const { userId } = req.query;
 
@@ -122,13 +127,13 @@ exports.getUserOrders = functions.https.onRequest(async (req, res) => {
     });
 });
 
+
 // Duplicate a product
-exports.duplicateProduct = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
+exports.duplicateProduct = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
         try {
             const { productId, newTitle, newPrice } = req.body;
 
-            // Get the original product from Firestore
             const productRef = db.collection('products').doc(productId);
             const productDoc = await productRef.get();
 
@@ -138,7 +143,6 @@ exports.duplicateProduct = functions.https.onRequest(async (req, res) => {
 
             const originalProduct = productDoc.data();
 
-            // Create duplicate product with optional modifications
             const duplicateProduct = {
                 ...originalProduct,
                 title: newTitle || `Copy of ${originalProduct.title}`,
@@ -148,10 +152,8 @@ exports.duplicateProduct = functions.https.onRequest(async (req, res) => {
                 isDuplicate: true
             };
 
-            // Remove the ID field to let Firestore generate a new one
             delete duplicateProduct.id;
 
-            // Add the duplicate product to Firestore
             const newProductRef = await db.collection('products').add(duplicateProduct);
 
             res.json({
@@ -166,9 +168,10 @@ exports.duplicateProduct = functions.https.onRequest(async (req, res) => {
     });
 });
 
+
 // Get all products for admin management
-exports.getProducts = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
+exports.getProducts = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
         try {
             const productsSnapshot = await db.collection('products').get();
 
@@ -185,19 +188,18 @@ exports.getProducts = functions.https.onRequest(async (req, res) => {
                 products: products
             });
         } catch (error) {
-            console.error('Error fetching products:', error);
             res.status(500).json({ error: error.message });
         }
     });
 });
 
+
 // Create a new product (for admin)
-exports.createProduct = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
+exports.createProduct = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
         try {
             const productData = req.body;
 
-            // Add product to Firestore
             const productRef = await db.collection('products').add({
                 ...productData,
                 createdAt: admin.firestore.FieldValue.serverTimestamp()
@@ -209,15 +211,15 @@ exports.createProduct = functions.https.onRequest(async (req, res) => {
                 message: 'Product created successfully'
             });
         } catch (error) {
-            console.error('Error creating product:', error);
             res.status(500).json({ error: error.message });
         }
     });
 });
 
+
 // Update a product (for admin)
-exports.updateProduct = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
+exports.updateProduct = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
         try {
             const { productId, productData } = req.body;
 
@@ -225,14 +227,7 @@ exports.updateProduct = functions.https.onRequest(async (req, res) => {
                 return res.status(400).json({ error: 'Missing productId or productData' });
             }
 
-            const productRef = db.collection('products').doc(productId);
-            const productDoc = await productRef.get();
-
-            if (!productDoc.exists) {
-                return res.status(404).json({ error: 'Product not found' });
-            }
-
-            await productRef.update({
+            await db.collection('products').doc(productId).update({
                 ...productData,
                 updatedAt: admin.firestore.FieldValue.serverTimestamp()
             });
@@ -243,15 +238,15 @@ exports.updateProduct = functions.https.onRequest(async (req, res) => {
                 message: 'Product updated successfully'
             });
         } catch (error) {
-            console.error('Error updating product:', error);
             res.status(500).json({ error: error.message });
         }
     });
 });
 
+
 // Delete a product (for admin)
-exports.deleteProduct = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
+exports.deleteProduct = functions.https.onRequest((req, res) => {
+    return cors(req, res, async () => {
         try {
             const { productId } = req.body;
 
@@ -259,14 +254,7 @@ exports.deleteProduct = functions.https.onRequest(async (req, res) => {
                 return res.status(400).json({ error: 'Missing productId' });
             }
 
-            const productRef = db.collection('products').doc(productId);
-            const productDoc = await productRef.get();
-
-            if (!productDoc.exists) {
-                return res.status(404).json({ error: 'Product not found' });
-            }
-
-            await productRef.delete();
+            await db.collection('products').doc(productId).delete();
 
             res.json({
                 success: true,
@@ -274,353 +262,6 @@ exports.deleteProduct = functions.https.onRequest(async (req, res) => {
                 message: 'Product deleted successfully'
             });
         } catch (error) {
-            console.error('Error deleting product:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-// Get product by ID
-exports.getProductById = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { productId } = req.query;
-
-            if (!productId) {
-                return res.status(400).json({ error: 'Missing productId parameter' });
-            }
-
-            const productRef = db.collection('products').doc(productId);
-            const productDoc = await productRef.get();
-
-            if (!productDoc.exists) {
-                return res.status(404).json({ error: 'Product not found' });
-            }
-
-            res.json({
-                success: true,
-                product: {
-                    id: productDoc.id,
-                    ...productDoc.data()
-                }
-            });
-        } catch (error) {
-            console.error('Error fetching product:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-// Get products by category
-exports.getProductsByCategory = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { category } = req.query;
-
-            if (!category) {
-                return res.status(400).json({ error: 'Missing category parameter' });
-            }
-
-            const productsSnapshot = await db.collection('products')
-                .where('category', '==', category)
-                .get();
-
-            const products = [];
-            productsSnapshot.forEach((doc) => {
-                products.push({
-                    id: doc.id,
-                    ...doc.data()
-                });
-            });
-
-            res.json({
-                success: true,
-                products: products
-            });
-        } catch (error) {
-            console.error('Error fetching products by category:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-// Search products
-exports.searchProducts = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { query } = req.query;
-
-            if (!query) {
-                return res.status(400).json({ error: 'Missing search query parameter' });
-            }
-
-            const productsSnapshot = await db.collection('products').get();
-            const products = [];
-
-            productsSnapshot.forEach((doc) => {
-                const product = doc.data();
-                const searchableText = `${product.title} ${product.category} ${product.description}`.toLowerCase();
-                if (searchableText.includes(query.toLowerCase())) {
-                    products.push({
-                        id: doc.id,
-                        ...product
-                    });
-                }
-            });
-
-            res.json({
-                success: true,
-                products: products
-            });
-        } catch (error) {
-            console.error('Error searching products:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-// Get all categories
-exports.getCategories = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const productsSnapshot = await db.collection('products').get();
-            const categories = new Set();
-
-            productsSnapshot.forEach((doc) => {
-                const product = doc.data();
-                if (product.category) {
-                    categories.add(product.category);
-                }
-            });
-
-            res.json({
-                success: true,
-                categories: Array.from(categories)
-            });
-        } catch (error) {
-            console.error('Error fetching categories:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-// Get payment history endpoint
-exports.getPaymentHistory = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { userId } = req.query;
-
-            if (!userId) {
-                return res.status(400).json({ error: 'Missing userId parameter' });
-            }
-
-            const ordersSnapshot = await db.collection('orders')
-                .where('userId', '==', userId)
-                .orderBy('createdAt', 'desc')
-                .get();
-
-            const payments = [];
-            ordersSnapshot.forEach((doc) => {
-                const order = doc.data();
-                payments.push({
-                    id: doc.id,
-                    paymentId: order.paymentId,
-                    amount: order.total,
-                    status: order.status,
-                    createdAt: order.createdAt,
-                    items: order.items
-                });
-            });
-
-            res.json({
-                success: true,
-                payments: payments
-            });
-
-        } catch (error) {
-            console.error('Error fetching payment history:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-// Shopping Cart Endpoints
-exports.getCart = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { userId } = req.query;
-
-            if (!userId) {
-                return res.status(400).json({ error: 'Missing userId parameter' });
-            }
-
-            const cartSnapshot = await db.collection('carts').where('userId', '==', userId).get();
-            if (!cartSnapshot.empty) {
-                const cartDoc = cartSnapshot.docs[0];
-                return res.json({
-                    success: true,
-                    cart: {
-                        id: cartDoc.id,
-                        ...cartDoc.data()
-                    }
-                });
-            }
-
-            // Fallback to empty cart if not found
-            res.json({
-                success: true,
-                cart: {
-                    id: 'cart_' + Date.now(),
-                    userId: userId,
-                    items: [],
-                    total: 0,
-                    updatedAt: admin.firestore.FieldValue.serverTimestamp()
-                }
-            });
-
-        } catch (error) {
-            console.error('Error fetching cart:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-exports.updateCart = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { userId, items } = req.body;
-
-            if (!userId || !items) {
-                return res.status(400).json({ error: 'Missing userId or items' });
-            }
-
-            const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const cartData = {
-                userId,
-                items,
-                total,
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            };
-
-            const cartSnapshot = await db.collection('carts').where('userId', '==', userId).get();
-            let cartId;
-
-            if (!cartSnapshot.empty) {
-                const cartDoc = cartSnapshot.docs[0];
-                await cartDoc.ref.update(cartData);
-                cartId = cartDoc.id;
-            } else {
-                const cartRef = await db.collection('carts').add(cartData);
-                cartId = cartRef.id;
-            }
-
-            res.json({
-                success: true,
-                cartId,
-                message: 'Cart updated successfully',
-                total
-            });
-
-        } catch (error) {
-            console.error('Error updating cart:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-exports.clearCart = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { userId } = req.body;
-
-            if (!userId) {
-                return res.status(400).json({ error: 'Missing userId' });
-            }
-
-            const cartSnapshot = await db.collection('carts').where('userId', '==', userId).get();
-            if (!cartSnapshot.empty) {
-                await cartSnapshot.docs[0].ref.delete();
-            }
-
-            res.json({
-                success: true,
-                message: 'Cart cleared successfully'
-            });
-
-        } catch (error) {
-            console.error('Error clearing cart:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-// Delivery Status Endpoint
-exports.getDeliveryStatus = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { orderId } = req.query;
-
-            if (!orderId) {
-                return res.status(400).json({ error: 'Missing orderId parameter' });
-            }
-
-            const orderRef = db.collection('orders').doc(orderId);
-            const orderDoc = await orderRef.get();
-
-            if (orderDoc.exists) {
-                const orderData = orderDoc.data();
-                return res.json({
-                    success: true,
-                    orderId,
-                    status: orderData.status || 'shipped',
-                    estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-                    trackingNumber: `TRK${Math.random().toString(36).substr(2, 9).toUpperCase()}`
-                });
-            }
-
-            res.status(404).json({ error: 'Order not found' });
-
-        } catch (error) {
-            console.error('Error fetching delivery status:', error);
-            res.status(500).json({ error: error.message });
-        }
-    });
-});
-
-// Recommendations Endpoint ("Customers who bought this also bought")
-exports.getRecommendations = functions.https.onRequest(async (req, res) => {
-    cors(req, res, async () => {
-        try {
-            const { productId, category } = req.query;
-
-            if (!productId && !category) {
-                return res.status(400).json({ error: 'Missing productId or category parameter' });
-            }
-
-            let recommendations = [];
-            if (category) {
-                const productsSnapshot = await db.collection('products')
-                    .where('category', '==', category)
-                    .limit(4)
-                    .get();
-
-                productsSnapshot.forEach(doc => {
-                    if (doc.id !== productId) {
-                        recommendations.push({
-                            id: doc.id,
-                            ...doc.data()
-                        });
-                    }
-                });
-            }
-
-            res.json({
-                success: true,
-                recommendations: recommendations
-            });
-
-        } catch (error) {
-            console.error('Error fetching recommendations:', error);
             res.status(500).json({ error: error.message });
         }
     });
