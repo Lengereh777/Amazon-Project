@@ -1,0 +1,138 @@
+.sell-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sell-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.sell-header h1 {
+    font-size: 28px;
+    color: #131921;
+    margin-bottom: 10px;
+}
+
+.sell-header p {
+    font-size: 16px;
+    color: #666;
+}
+
+.sell-benefits {
+    margin-bottom: 40px;
+}
+
+.sell-benefits h2 {
+    font-size: 22px;
+    color: #131921;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.benefit-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: box-shadow 0.2s;
+}
+
+.benefit-card:hover {
+    box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+}
+
+.benefit-icon {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.benefit-card h3 {
+    font-size: 16px;
+    color: #131921;
+    margin-bottom: 8px;
+}
+
+.benefit-card p {
+    font-size: 14px;
+    color: #666;
+}
+
+.sell-steps {
+    margin-bottom: 40px;
+}
+
+.sell-steps h2 {
+    font-size: 22px;
+    color: #131921;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.steps-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.step-item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: #0071c3;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0 auto 15px;
+}
+
+.step-item h3 {
+    font-size: 16px;
+    color: #131921;
+    margin-bottom: 8px;
+}
+
+.step-item p {
+    font-size: 14px;
+    color: #666;
+}
+
+.sell-cta {
+    text-align: center;
+}
+
+.sell-btn {
+    background: #febd69;
+    border: 1px solid #a88734;
+    padding: 15px 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+.sell-btn:hover {
+    background: #f3a847;
+}

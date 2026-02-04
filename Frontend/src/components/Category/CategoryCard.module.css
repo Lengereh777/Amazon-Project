@@ -1,0 +1,56 @@
+.category {
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(15, 17, 17, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  height: 360px;                 /* 🔑 alle Cards gleich hoch */
+  display: flex;
+  flex-direction: column;
+}
+
+.category:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(15, 17, 17, 0.2);
+}
+
+/* Ganze Card klickbar */
+.category a {
+  text-decoration: none;
+  color: inherit;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Titel */
+.category h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f1111;
+  margin-bottom: 10px;
+}
+
+/* 🔑 ALLE BILDER GLEICH */
+.category img {
+  width: 100%;
+  height: 200px;          /* feste Höhe */
+  object-fit: contain;   /* Amazon-Style */
+  object-position: center;
+  margin: 10px 0;
+}
+
+/* Shop now */
+.category p {
+  margin-top: auto;
+  font-size: 14px;
+  font-weight: 500;
+  color: #007185; /* Amazon Blau */
+}
+
+.category p:hover {
+  color: #c7511f; /* Amazon Orange */
+  text-decoration: underline;
+}

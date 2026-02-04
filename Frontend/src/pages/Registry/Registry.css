@@ -1,0 +1,74 @@
+.registry-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.registry-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.registry-header h1 {
+    font-size: 28px;
+    color: #131921;
+    margin-bottom: 10px;
+}
+
+.registry-header p {
+    font-size: 16px;
+    color: #666;
+}
+
+.registry-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.registry-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.registry-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgb(0 0 0 / 10%);
+}
+
+.card-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.registry-card h2 {
+    font-size: 20px;
+    color: #131921;
+    margin-bottom: 10px;
+}
+
+.registry-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.registry-btn {
+    background: #febd69;
+    border: 1px solid #a88734;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background 0.2s;
+    width: 100%;
+}
+
+.registry-btn:hover {
+    background: #f3a847;
+}

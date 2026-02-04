@@ -1,0 +1,40 @@
+.wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slide {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* dunkler Verlauf wie bei Amazon */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to top, rgb(0 0 0 / 60%), transparent);
+}
+
+/* Tablet */
+@media (width <= 1024px) {
+  .slide {
+    height: 45vh;
+  }
+}
+
+/* Mobile */
+@media (width <= 600px) {
+  .slide {
+    height: 35vh;
+  }
+}

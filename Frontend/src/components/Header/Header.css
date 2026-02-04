@@ -1,0 +1,234 @@
+/* Grundlegende Zurücksetzung & Schriftart */
+.amz-header {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Arial', sans-serif;
+  color: white;
+  background-color: #131921;
+}
+
+/* Obere Sektion */
+.amz-header-top {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  height: 60px;
+}
+
+.amz-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 30px;
+}
+
+/* Gemeinsames Styling für die Boxen (Hover-Effekt) */
+.nav-box {
+  padding: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-box:hover {
+  border: 1px solid white;
+  border-radius: 2px;
+}
+
+/* Logo */
+.amz-logo-img {
+  width: 100px;
+  object-fit: contain;
+  margin-top: 10px;
+}
+
+/* Standort */
+.amz-location {
+  flex-direction: row !important;
+  align-items: center;
+}
+
+.location-icon {
+  font-size: 18px;
+  margin-right: 3px;
+  margin-top: 10px;
+}
+
+/* Text-Zeilen */
+.nav-text-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-line-1 {
+  font-size: 12px;
+  color: #cccccc;
+}
+
+.nav-line-2 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Suchleiste */
+.amz-search-container {
+  display: flex;
+  flex-grow: 1;
+  height: 40px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 10px;
+}
+
+.amz-search-container:focus-within {
+  box-shadow: 0 0 0 3px #f3a847; /* Amazon Orange Fokus */
+}
+
+.amz-search-select {
+  background-color: #f3f3f3;
+  width: 50px;
+  border: none;
+  border-right: 1px solid #ccc;
+  cursor: pointer;
+  padding-left: 5px;
+}
+
+.amz-search-form {
+  display: flex;
+  flex-grow: 1;
+}
+
+.amz-search-input {
+  flex-grow: 1;
+  border: none;
+  padding: 0 10px;
+  font-size: 15px;
+  outline: none;
+}
+
+.amz-search-btn {
+  background-color: #febd69;
+  border: none;
+  width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.amz-search-btn:hover {
+  background-color: #f3a847;
+}
+
+/* Rechte Navigation */
+.amz-right-nav {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.amz-account {
+  position: relative;
+}
+
+.chevron {
+  font-size: 10px;
+  color: #a7acb2;
+}
+
+/* Warenkorb */
+.amz-cart {
+  flex-direction: row !important;
+  align-items: flex-end;
+}
+
+.cart-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cart-icon {
+  font-size: 30px;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  left: 13px;
+  color: #f08804;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.cart-label {
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+/* Untere Navigation */
+.amz-header-bottom {
+  background-color: #232f3e;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.all-menu {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+}
+
+.bottom-nav-links {
+  display: flex;
+  gap: 15px;
+  margin-left: 10px;
+}
+
+.bottom-nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid transparent;
+}
+
+.bottom-nav-links a:hover {
+  border: 1px solid white;
+}
+
+/* Dropdown (Sign Out) */
+.amz-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 100;
+  min-width: 120px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #0066c0;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.logout-btn:hover {
+  text-decoration: underline;
+}

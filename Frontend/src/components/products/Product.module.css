@@ -1,0 +1,11 @@
+
+.products_container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0px;
+    margin-bottom: 40px;
+    z-index: 30;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+  }
