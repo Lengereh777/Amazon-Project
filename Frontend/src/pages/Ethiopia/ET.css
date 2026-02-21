@@ -1,0 +1,63 @@
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 14px;
+  color: #565959;
+  margin-bottom: 20px;
+}
+
+/* Card */
+.location-card {
+  max-width: 500px;
+  background: #fff;
+  padding: 25px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.location-card h1 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #565959;
+  margin-bottom: 20px;
+}
+
+/* Current location */
+.current-location {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* Select */
+.label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.city-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #a6a6a6;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+/* Button */
+.save-btn {
+  width: 100%;
+  padding: 10px;
+  background: #febd69;
+  border: 1px solid #a88734;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #f3a847;
+}

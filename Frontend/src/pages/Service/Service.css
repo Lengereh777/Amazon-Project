@@ -1,0 +1,18 @@
+.service-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.service-container h2 {
+    font-size: 2.5rem;
+    color: #111;
+    margin-bottom: 20px;
+}
+
+.service-container p {
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.6;
+}
