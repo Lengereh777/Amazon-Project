@@ -1,0 +1,47 @@
+# Render Blueprint for Amazon Clone Deployment
+# This file enables one-click deployment to Render
+
+services:
+  # Backend Web Service
+  - type: web
+    name: amazon-clone-backend
+    env: node
+    region: oregon # or frankfurt for Europe
+    plan: free # Free tier
+    buildCommand: cd Backend && npm install
+    startCommand: cd Backend && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: SUPABASE_URL
+        sync: false # Set manually in Render dashboard
+      - key: SUPABASE_SERVICE_KEY
+        sync: false # Set manually in Render dashboard
+      - key: STRIPE_SECRET_KEY
+        sync: false # Set manually in Render dashboard
+
+  # Frontend Static Site
+  - type: static
+    name: amazon-clone-frontend
+    env: static
+    region: oregon # or frankfurt for Europe
+    buildCommand: cd Frontend && npm install && npm run build
+    staticPublishPath: Frontend/dist
+    pullRequestPreviewsEnabled: true
+    envVars:
+      - key: VITE_API_BASE_URL
+        # This will be automatically set after backend deployment
+        value: https://amazon-clone-backend.onrender.com
+      - key: VITE_SUPABASE_URL
+        sync: false # Set manually in Render dashboard
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false # Set manually in Render dashboard
+      - key: VITE_STRIPE_PUBLISHABLE_KEY
+        sync: false # Set manually in Render dashboard
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

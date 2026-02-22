@@ -1,6 +1,6 @@
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import styles from "./carousel.module.css";
+import styles from "./Carousel.module.css";
 import { images } from "./img/data";
 
 function CarouselEffect() {
