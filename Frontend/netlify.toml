@@ -1,3 +1,9 @@
+# NOTE: This file is kept for local development reference.
+# The primary Netlify configuration is in the root: ../netlify.toml
+# That configuration specifies base = "Frontend" and includes all settings.
+
+# If deploying this Frontend folder independently, use the settings below:
+
 [build]
   command = "npm run build"
   publish = "dist"
@@ -9,18 +15,3 @@
 
 [build.environment]
   NODE_VERSION = "18"
-
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
