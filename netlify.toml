@@ -1,40 +1,30 @@
-# Netlify Configuration for Amazon Clone Frontend
-# Optimized for credit-based pricing plans
+# Netlify Configuration for Amazon Clone
+# Free Plan: 300 credits/month
 
 [build]
-  base = "Frontend"
-  command = "npm ci --prefer-offline && npm run build"
+  # Build command for the frontend
+  command = "npm run build"
+  # Directory to publish
   publish = "dist"
 
 [build.environment]
+  # Node.js version
   NODE_VERSION = "18"
-  NPM_FLAGS = "--prefer-offline"
 
-# SPA fallback routing - handles client-side routing
+# Redirect all routes to index.html for SPA
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# API proxy for backend (if using Netlify Functions or external API)
-# Uncomment and configure when backend is deployed
-# [[redirects]]
-#   from = "/api/*"
-#   to = "https://your-backend-url.com/api/:splat"
-#   status = 200
-#   force = true
-
-# Security headers for all pages
+# Headers for security and caching
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
-# Long-term caching for static assets (reduces bandwidth costs)
 [[headers]]
   for = "/assets/*"
   [headers.values]
@@ -50,38 +40,7 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Short-term caching for HTML (allows updates while reducing requests)
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-# Image caching (1 week for images)
-[[headers]]
-  for = "/*.jpg"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
-[[headers]]
-  for = "/*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
-[[headers]]
-  for = "/*.webp"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
-# Netlify Forms support (if needed)
-# [build.processing]
-#   skip_processing = false
-# [build.processing.css]
-#   bundle = true
-#   minify = true
-# [build.processing.js]
-#   bundle = true
-#   minify = true
-# [build.processing.html]
-#   pretty_urls = true
-# [build.processing.images]
-#   compress = true
+# Netlify Functions directory (if needed)
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
